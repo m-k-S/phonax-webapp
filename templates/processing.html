@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processing</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <style>
+        #progress-bar {
+            width: 0;
+            height: 30px;
+            background-color: #4CAF50;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Processing File</h1>
+    <div id="progress-bar">0%</div>
+    <div id="result"></div>
+
+    <script type="text/javascript">
+        var socket = io();
+        socket.on('progress', function(data) {
+            var progressBar = document.getElementById('progress-bar');
+            progressBar.style.width = data.progress + '%';
+            progressBar.innerHTML = Math.round(data.progress) + '%';
+        });
+        socket.on('complete', function(data) {
+            document.getElementById('result').innerHTML = '<img src="data:image/png;base64,' + data.plot_data + '" alt="Plot"><br><a href="/">Upload Another File</a>';
+        });
+    </script>
+</body>
+</html>
