@@ -37,6 +37,7 @@
             background-color: #e0e0e0;
             border-radius: 4px;
             margin-bottom: 1rem;
+            display: block;
         }
         #progressBar {
             width: 0;
@@ -58,17 +59,21 @@
 </head>
 <body>
     <div class="container">
-        <h1>File Upload</h1>
-        <p>Upload your file and watch the progress</p>
+        <h1><a href="https://arxiv.org/abs/2305.08456">Phonax</a></h1>
+        <p><a href="https://arxiv.org/abs/2305.08456">Phonax</a> is a software tool that makes predictions of the vibrational and phonon modes of molecules and periodic crystals. <br> 
+        It is orders of magnitude faster than ab-initio phonon calculation frameworks such as DFPT or GWPT. <br> 
+        This webapp is intended to serve as a convenient interface for quickly calculating and plotting phonon band structure and density of states. <br>
+        To use it, simply upload a CIF file for a valid crystal structure. <br>
+        Phonax was written by Shiang Fang and Mario Geiger.</p>
         <form method="post" enctype="multipart/form-data">
             <input type="file" name="file">
             <input type="submit" value="Upload and Process">
-        </form>
+        </form> <br>
         <div id="progressContainer" style="width: 100%; background-color: #ddd;">
             <div id="progressBar">0%</div>
         </div>
         <div id="band_structure_plot">
-            {fig}
+            {{fig}}
         </div>
     </div>
 
@@ -89,7 +94,7 @@
             var progress = data.data;
             progressBar.style.width = progress + '%';
             progressBar.innerHTML = progress + '%';
-            if (progress === 100) {
+            if (progress === 99) {
                 setTimeout(() => {
                     progressContainer.style.display = 'none';
                     imageContainer.style.display = 'block';
