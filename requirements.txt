@@ -1,0 +1,4 @@
+phonax @ git+https://github.com/atomicarchitects/phonax.git
+nequip_jax @ git+https://github.com/mariogeiger/nequip-jax.git
+flask
+flask-socketio
