@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Display</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <style>
+        #progress-bar {
+            width: 0;
+            height: 30px;
+            background-color: #4CAF50;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Task Progress</h1>
+    <div id="progress-container" style="width: 100%; background-color: #ddd;">
+        <div id="progress-bar">0%</div>
+    </div>
+
+    <script>
+        var socket = io();
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+
+        socket.on('progress', function(data) {
+            var progressBar = document.getElementById('progress-bar');
+            var progress = data.data;
+            progressBar.style.width = progress + '%';
+            progressBar.innerHTML = progress + '%';
+        });
+    </script>
+</body>
+</html>

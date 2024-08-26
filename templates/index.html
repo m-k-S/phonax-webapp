@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phonax</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        #fileInput {
+            margin-bottom: 1rem;
+        }
+        #progressContainer {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        #progressBar {
+            width: 0;
+            height: 30px;
+            background-color: #4CAF50;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+        }
+        #imageContainer {
+            display: none;
+            max-width: 100%;
+        }
+        #uploadedImage {
+            max-width: 100%;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>File Upload</h1>
+        <p>Upload your file and watch the progress</p>
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <input type="submit" value="Upload and Process">
+        </form>
+        <div id="progressContainer" style="width: 100%; background-color: #ddd;">
+            <div id="progressBar">0%</div>
+        </div>
+        <div id="band_structure_plot">
+            {fig}
+        </div>
+    </div>
+
+    <script>
+        var socket = io();
+        const fileInput = document.getElementById('fileInput');
+        const progressContainer = document.getElementById('progressContainer');
+        const imageContainer = document.getElementById('imageContainer');
+        const uploadedImage = document.getElementById('uploadedImage');
+
+        var socket = io();
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+
+        socket.on('progress', function(data) {
+            var progressBar = document.getElementById('progressBar');
+            var progress = data.data;
+            progressBar.style.width = progress + '%';
+            progressBar.innerHTML = progress + '%';
+            if (progress === 100) {
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                    imageContainer.style.display = 'block';
+                }, 500);
+            }
+        });
+
+        socket.on('complete', function(data) {
+            document.getElementById('band_structure_plot').innerHTML = '<img src="data:image/png;base64,' + data.plot_data + '" alt="Plot"><br><a href="/">Upload Another File</a>';
+        });
+
+    </script>
+</body>
+</html>
